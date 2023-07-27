@@ -1,0 +1,77 @@
+{% extends "parent.html" %}
+{% block title %}Workshops{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="/static/css/table.css">
+{% endblock %}
+{% block page_name %}Workshops{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <input id="url_workshop_id" type="hidden" value="{{ workshop_id }}" />
+        <div class="section editor">
+            <div>
+                <span>Workshop ID:</span>
+                <span id="workshop_id"></span>
+            </div>
+            <label for="workshop_name">Workshop Name
+                <input id="workshop_name" type="text" />
+            </label>
+            <br />
+            <label for="chief_initials">Chief Initials
+                <input id="chief_initials" type="text" />
+            </label>
+            <br />
+            <label for="telephone">Telephone
+                <input id="telephone" type="text" />
+            </label>
+            <br />
+            <button id="create">Create</button>
+            <button id="update">Update</button>
+            <button id="delete">Delete</button>
+            <button id="reset">Reset</button>
+            <br />
+            <label for="new_product">New product
+                <input id="new_product" type="text" />
+            </label>
+            <button id="add_product">Add product</button>
+            <div>
+                <span>Product to delete:</span>
+                <span>
+                    <div id="product_id"></div>
+                    <div id="product_name"></div>
+                </span>
+            </div>
+            <button id="delete_product">Delete this product</button>
+        </div>
+        <div class="workshops">
+            <table>
+                <caption>Workshops</caption>
+                <thead>
+                    <tr>
+                        <th>Workshop Name</th>
+                        <th>Chief Initials</th>
+                        <th>Telephone</th>
+                        <th>Products</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="error">
+        </div>
+    </div>
+    <div class="error">
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+{{ super() }}
+<script type="module">
+    // Give the imported MVC components a namespace
+    import * as MVC from "/static/js/workshops.js";
+
+    // Create an intentional global variable referencing the import
+    window.mvc = MVC;
+</script>
+{% endblock %}

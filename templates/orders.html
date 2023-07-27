@@ -1,0 +1,79 @@
+{% extends "parent.html" %}
+{% block title %}Orders{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="/static/css/orders.css">
+{% endblock %}
+{% block page_name %}Orders{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <input id="url_order_id" type="hidden" value="{{ order_id }}" />
+        <div class="section editor">
+            <div>
+                <span>Order ID:</span>
+                <span id="order_id"></span>
+            </div>
+            <span>Product ID:</span>
+            <span id="product_id"></span>
+            <br />
+            <span>Client ID:</span>
+            <span id="contract_id"></span>
+            <br />
+            <label for="quantity">Quantity
+                <input id="quantity" type="number" />
+            </label>
+            <br />
+            <div id = "first">
+                    <div class="contracts">
+                        <p>Contract</p>
+                        <table>
+                            <thead>
+                            <th>client</th>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="products">
+                        <p>Product</p>
+                        <table>
+                            <thead>
+                            <th>name</th>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            <button id="create">Create</button>
+            <button id="update">Update</button>
+            <button id="delete">Delete</button>
+            <button id="reset">Reset</button>
+        </div>
+        <div class="orders">
+            <table>
+                <caption>Orders</caption>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Client Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="error">
+        </div>
+    </div>
+    <div class="error">
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+{{ super() }}
+<script type="module">
+    // Give the imported MVC components a namespace
+    import * as MVC from "/static/js/orders.js";
+
+    // Create an intentional global variable referencing the import
+    window.mvc = MVC;
+</script>
+{% endblock %}
