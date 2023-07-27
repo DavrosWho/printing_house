@@ -1,0 +1,63 @@
+{% extends "parent.html" %}
+{% block title %}Products{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="/static/css/table.css">
+{% endblock %}
+{% block page_name %}Products{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <input id="url_product_id" type="hidden" value="{{ product_id }}" />
+        <div class="section editor">
+            <div>
+                <span>Product ID:</span>
+                <span id="product_id"></span>
+            </div>
+            <label for="product_code">Product Code
+                <input id="product_code" type="text" />
+            </label>
+            <br />
+            <label for="product_name">Product Name
+                <input id="product_name" type="text" />
+            </label>
+            <br />
+            <label for="price">Price
+                <input id="price" type="number" />
+            </label>
+            <br />
+            <button id="create">Create</button>
+            <button id="update">Update</button>
+            <button id="delete">Delete</button>
+            <button id="reset">Reset</button>
+        </div>
+        <div class="products">
+            <table>
+                <caption>Products</caption>
+                <thead>
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="error">
+        </div>
+    </div>
+    <div class="error">
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+{{ super() }}
+<script type="module">
+    // Give the imported MVC components a namespace
+    import * as MVC from "/static/js/products.js";
+
+    // Create an intentional global variable referencing the import
+    window.mvc = MVC;
+</script>
+{% endblock %}

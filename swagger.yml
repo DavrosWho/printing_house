@@ -1,0 +1,383 @@
+# swagger.yml
+
+openapi: 3.0.0
+info:
+  title: "RP Flask REST API"
+  description: "An API about workshops and orders"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    Product:
+      type: "object"
+      required:
+        - product_id
+      properties:
+        product_id:
+          type: "integer"
+        product_code:
+          type: "string"
+        product_name:
+          type: "string"
+        price:
+          type: "integer"
+    Workshop:
+      type: "object"
+      required:
+        - workshop_id
+      properties:
+        workshop_id:
+          type: "integer"
+        workshop_name:
+          type: "string"
+        chief_initials:
+          type: "string"
+        telephone:
+          type: "string"
+        products:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Product"
+    Contract:
+      type: "object"
+      required:
+        - contract_id
+      properties:
+        contract_id:
+          type: "integer"
+        client_name:
+          type: "string"
+        client_address:
+          type: "string"
+        registration_date:
+          type: "string"
+          format: "yyyy-mm-dd"
+        completion_date:
+          type: "string"
+          format: "yyyy-mm-dd"
+    Order:
+      type: "object"
+      required:
+        - order_id
+      properties:
+        order_id:
+          type: "integer"
+        product_id:
+          type: "integer"
+        contract_id:
+          type: "integer"
+        quantity:
+          type: "integer"
+  parameters:
+    product_id:
+      name: "product_id"
+      description: "Id of the product to get"
+      in: path
+      required: True
+      schema:
+        type: "integer"
+    workshop_id:
+      name: "workshop_id"
+      description: "Id of the workshop to get"
+      in: path
+      required: True
+      schema:
+        type: "integer"
+    contract_id:
+      name: "contract_id"
+      description: "Id of the contract to get"
+      in: path
+      required: True
+      schema:
+        type: "integer"
+    order_id:
+      name: "order_id"
+      description: "Id of the order to get"
+      in: path
+      required: True
+      schema:
+        type: "integer"
+
+paths:
+  /products:
+    get:
+      operationId: "database.read_all_products"
+      tags:
+        - "Products"
+      summary: "Read the list of products"
+      responses:
+        "200":
+          description: "Successfully read products list"
+    post:
+      operationId: "database.create_product"
+      tags:
+        - Products
+      summary: "Create a product"
+      requestBody:
+          description: "Product to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "product"
+                $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: "Successfully created product"
+    put:
+      tags:
+        - Products
+      operationId: "database.update_product"
+      summary: "Update a product"
+      responses:
+        "200":
+          description: "Successfully updated product"
+      requestBody:
+        description: "Product to update"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "product"
+              $ref: "#/components/schemas/Product"
+
+  /products/{product_id}:
+    get:
+      operationId: "database.read_one_product"
+      tags:
+        - Products
+      summary: "Read one product"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "200":
+          description: "Successfully read product"
+    delete:
+      tags:
+        - Products
+      operationId: "database.delete_product"
+      summary: "Delete a product"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "204":
+          description: "Successfully deleted product"
+
+  /workshops:
+    get:
+      operationId: "database.read_all_workshops"
+      tags:
+        - "Workshops"
+      summary: "Read the list of workshops"
+      responses:
+        "200":
+          description: "Successfully read workshops list"
+    post:
+      operationId: "database.create_workshop"
+      tags:
+        - Workshops
+      summary: "Create a workshop"
+      requestBody:
+          description: "Workshop to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "workshop"
+                $ref: "#/components/schemas/Workshop"
+      responses:
+        "201":
+          description: "Successfully created workshop"
+    put:
+      tags:
+        - Workshops
+      operationId: "database.update_workshop"
+      summary: "Update a workshop"
+      responses:
+        "200":
+          description: "Successfully updated workshop"
+      requestBody:
+        description: "Workshop to update"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "workshop"
+              $ref: "#/components/schemas/Workshop"
+
+  /workshops/{workshop_id}:
+    get:
+      operationId: "database.read_one_workshop"
+      tags:
+        - Workshops
+      summary: "Read one workshop"
+      parameters:
+        - $ref: "#/components/parameters/workshop_id"
+      responses:
+        "200":
+          description: "Successfully read workshop"
+    delete:
+      tags:
+        - Workshops
+      operationId: "database.delete_workshop"
+      summary: "Delete a workshop"
+      parameters:
+        - $ref: "#/components/parameters/workshop_id"
+      responses:
+        "204":
+          description: "Successfully deleted workshop"
+
+  /products_in_workshops/{workshop_id}/{product_id}:
+    post:
+      operationId: "database.insert_product"
+      tags:
+        - Workshops
+      summary: "Insert product into workshop"
+      parameters:
+        - $ref: "#/components/parameters/workshop_id"
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "201":
+          description: "Successfully inserted product"
+    delete:
+      operationId: "database.extract_product"
+      tags:
+        - Workshops
+      summary: "Extract product from workshop"
+      parameters:
+        - $ref: "#/components/parameters/workshop_id"
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "201":
+          description: "Successfully extracted product"
+
+  /contracts:
+    get:
+      operationId: "database.read_all_contracts"
+      tags:
+        - "Contracts"
+      summary: "Read the list of contracts"
+      responses:
+        "200":
+          description: "Successfully read contracts list"
+    post:
+      operationId: "database.create_contract"
+      tags:
+        - Contracts
+      summary: "Create a contract"
+      requestBody:
+          description: "Contract to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "contract"
+                $ref: "#/components/schemas/Contract"
+      responses:
+        "201":
+          description: "Successfully created contract"
+    put:
+      tags:
+        - Contracts
+      operationId: "database.update_contract"
+      summary: "Update a contract"
+      responses:
+        "200":
+          description: "Successfully updated contract"
+      requestBody:
+        description: "Contract to update"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "contract"
+              $ref: "#/components/schemas/Contract"
+
+  /contracts/{contract_id}:
+    get:
+      operationId: "database.read_one_contract"
+      tags:
+        - Contracts
+      summary: "Read one contract"
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+      responses:
+        "200":
+          description: "Successfully read contract"
+    delete:
+      tags:
+        - Contracts
+      operationId: "database.delete_contract"
+      summary: "Delete a contract"
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+      responses:
+        "204":
+          description: "Successfully deleted contract"
+
+  /orders:
+    get:
+      operationId: "database.read_all_orders"
+      tags:
+        - "Orders"
+      summary: "Read the list of orders"
+      responses:
+        "200":
+          description: "Successfully read orders list"
+    post:
+      operationId: "database.create_order"
+      tags:
+        - Orders
+      summary: "Create an order"
+      requestBody:
+          description: "Order to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "order"
+                $ref: "#/components/schemas/Order"
+      responses:
+        "201":
+          description: "Successfully created order"
+    put:
+      tags:
+        - Orders
+      operationId: "database.update_order"
+      summary: "Update an order"
+      responses:
+        "200":
+          description: "Successfully updated order"
+      requestBody:
+        description: "Order to update"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "order"
+              $ref: "#/components/schemas/Order"
+
+  /orders/{order_id}:
+    get:
+      operationId: "database.read_one_order"
+      tags:
+        - Orders
+      summary: "Read one order"
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      responses:
+        "200":
+          description: "Successfully read order"
+    delete:
+      tags:
+        - Orders
+      operationId: "database.delete_order"
+      summary: "Delete an order"
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      responses:
+        "204":
+          description: "Successfully deleted order"
